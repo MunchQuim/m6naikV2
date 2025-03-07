@@ -1,0 +1,55 @@
+<form [formGroup]="naikForm" (ngSubmit)="saveData()" action="" method="post" class="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-lg space-y-4">
+    <div>
+        <label for="reference" class="block text-gray-700 font-semibold">Nº de referencia*</label>
+        <input formControlName="id" type="text" name="reference" id="reference" class="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-300" >
+        <div *ngIf="naikForm.get('id')?.invalid&&!naikForm.get('id')?.pristine" class="alert alert-danger">el campo es inválido.</div>
+
+    </div>
+    <div>
+        <label for="name" class="block text-gray-700 font-semibold">Nombre del producto*</label>
+        <input (change)="onChangeName($event)" formControlName="nombre" type="text" name="name" id="name" class="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-300">
+        <div *ngIf="naikForm.get('nombre')?.invalid&&!naikForm.get('nombre')?.pristine" class="alert alert-danger">el campo es inválido.</div>
+
+    </div>
+    <div>
+        <label for="price" class="block text-gray-700 font-semibold">Precio*</label>
+        <input formControlName="precio" type="text" name="price" id="price" class="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-300">
+        <div *ngIf="naikForm.get('precio')?.invalid&&!naikForm.get('precio')?.pristine" class="alert alert-danger">el campo es inválido.</div>
+
+    </div>
+    <div>
+        <label for="description" class="block text-gray-700 font-semibold">Descripción del producto</label>
+        <textarea formControlName="descripcion" name="description" id="description" rows="3" class="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-300"></textarea>
+        <div *ngIf="naikForm.get('descripcion')?.invalid&&!naikForm.get('descripcion')?.pristine" class="alert alert-danger">el campo es inválido.</div>
+
+    </div>
+    <div>
+        <label for="type" class="block text-gray-700 font-semibold">Tipo de producto*</label>
+        <select formControlName="tipo" id="type" name="type" class="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-300">
+            <option value="Zapatillas running">Zapatillas running</option>
+            <option value="Zapatillas básquet">Zapatillas básquet</option>
+            <option value="Zapatillas de salto de pértiga">Zapatillas de salto de pértiga</option>
+            <option value="Zapatillas C#">Zapatillas C#</option>
+        </select>
+    </div>
+    <div class="flex items-center">
+        <label for="sale" class="text-gray-700 font-semibold">Producto de oferta</label>
+        <input  formControlName="oferta" type="checkbox" name="sale" id="sale" class="mr-2" >
+    </div><!-- aprender a usar observadores y servicios para resetear el valor a 0 -->
+    <div *ngIf="naikForm.get('oferta')?.value" class="flex items-center">
+        <label for="discount" class="text-gray-700 font-semibold">Descuento</label>
+        <input formControlName="descuento" type="number" min=0 max=95 name="discount" id="discount" class="mr-2" value=0>
+        <div *ngIf="naikForm.get('descuento')?.invalid&&!naikForm.get('descuento')?.pristine" class="alert alert-danger">el campo es inválido.</div>
+
+    </div>
+    <div>
+        <label for="image" class="block text-gray-700 font-semibold">Imagen del producto*</label>
+        <input formControlName="imagen" (change)="onFileSelected($event)" type="file" name="image" id="image" class="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-300">
+        <div *ngIf="naikForm.get('imagen')?.invalid&&!naikForm.get('imagen')?.pristine" class="alert alert-danger">el campo es inválido.</div>
+
+    </div>
+    <div class="text-center">
+        <button type="submit" [disabled]="naikForm.invalid" class="px-6 py-2 bg-blue-600 scale-100 disabled:scale-0 text-white font-semibold rounded-md hover:bg-blue-700 transition">Enviar</button>
+    </div>
+</form>
+<!-- <app-products></app-products> -->
