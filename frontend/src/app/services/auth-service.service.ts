@@ -20,4 +20,15 @@ export class AuthServiceService {
   toggleLogin(){
     this.showLogin.set(!this.showLogin());
   }
+  logout(){
+    sessionStorage.removeItem("user");
+  }
+  
+  isAuthenticated(): boolean {
+    return sessionStorage.getItem('user') !== null;
+  }
+  getUser() {
+    const user = sessionStorage.getItem('user');
+    return user ? JSON.parse(user) : null;
+  }
 }

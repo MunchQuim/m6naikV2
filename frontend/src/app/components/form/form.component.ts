@@ -44,6 +44,7 @@ export class FormComponent {
           (response) => console.log('Imagen subida con éxito:', response),
           (error) => console.error('Error al subir la imagen:', error)
         );
+        
         const newProduct: Product = this.naikForm.value;
         newProduct.imagen = 'http://localhost:3000/' + customFileName;
         this.productService.addProduct(newProduct);
@@ -53,9 +54,6 @@ export class FormComponent {
         this.naikForm.reset({ oferta: false, descuento: 0 });
 
       }
-
-
-
     }
   }
 

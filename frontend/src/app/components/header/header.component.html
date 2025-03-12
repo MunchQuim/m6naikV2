@@ -5,17 +5,20 @@
             <app-logo-converse></app-logo-converse>
         </div>
         <div class="w-[600px] flex justify-end px-10">
-            <ul class="font-bold flex items-center text-sm
-            ">
-                <li class="flex">
+            <ul  class="font-bold flex items-center text-sm">
+                <li *ngIf="!authService.isAuthenticated()" class="flex">
                     <button (click)="toggleRegister()" class="cursor-pointer hover:bg-stone-600 bg-black text-white p-1 rounded-lg transition duration-300 ease-in-out active:scale-90">Regístrate</button>
                     <div class="vertical-line">&nbsp;|&nbsp;</div>
                 </li>
-                <li class="flex">
+                <li *ngIf="!authService.isAuthenticated()" class="flex">
                     <button (click)="toggleLogin()" class="cursor-pointer hover:bg-stone-600 bg-black text-white p-1 rounded-lg transition duration-300 ease-in-out active:scale-90">Iniciar sesión </button>
                 </li>
+                <li *ngIf="authService.isAuthenticated()" class="flex">
+                    <button  (click)="logout()"class="cursor-pointer hover:bg-stone-600 bg-black text-white p-1 rounded-lg transition duration-300 ease-in-out active:scale-90">Cerrar sesión </button>
+        
+                </li>
             </ul>
-        </div>
+            </div>
     </div>
     <div class="bg-white grow flex items-center">
         
