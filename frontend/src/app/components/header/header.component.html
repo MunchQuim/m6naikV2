@@ -8,19 +8,11 @@
             <ul class="font-bold flex items-center text-sm
             ">
                 <li class="flex">
-                    <div>Buscar una tienda</div>
-                    <div class="vertical-line ">&nbsp;|&nbsp;</div>
-                </li>
-                <li class="flex">
-                    <div>Ayuda</div>
-                    <div class="vertical-line">&nbsp;|&nbsp; </div>
-                </li>
-                <li class="flex">
-                    <div>Únete a nosotros</div>
+                    <button (click)="toggleRegister()" class="cursor-pointer hover:bg-stone-600 bg-black text-white p-1 rounded-lg transition duration-300 ease-in-out active:scale-90">Regístrate</button>
                     <div class="vertical-line">&nbsp;|&nbsp;</div>
                 </li>
                 <li class="flex">
-                    <div>Iniciar sesión </div>
+                    <button (click)="toggleLogin()" class="cursor-pointer hover:bg-stone-600 bg-black text-white p-1 rounded-lg transition duration-300 ease-in-out active:scale-90">Iniciar sesión </button>
                 </li>
             </ul>
         </div>

@@ -1,3 +1,6 @@
 <app-header></app-header>
 <router-outlet/>
 <app-footer></app-footer>
+
+<app-login *ngIf="showLogin()()"></app-login>
+<app-register *ngIf="showRegister()()"></app-register>

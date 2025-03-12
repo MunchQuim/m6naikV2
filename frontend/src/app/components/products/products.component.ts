@@ -14,6 +14,7 @@ export class ProductsComponent {
   viewProducts: Product[] = [];
   filter: string = '';
   size: number = 0;
+  
   constructor(private productService: AddProductsService) {
     this.products = this.productService.getProducts();
     this.viewProducts = this.products();
