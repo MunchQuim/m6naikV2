@@ -4,10 +4,10 @@
         <a routerLink="/home">
             <div>HOME</div>
         </a>
-        <a routerLink="/products">
+        <a *ngIf="authService.isAuthenticated()" routerLink="/products">
             <div>PRODUCTS</div>
         </a>
-        <a routerLink="/admin">
+        <a *ngIf="authService.isAuthenticated() && authService.isAdmin()" routerLink="/admin">
             <div>ADMIN</div>
         </a>
     </div>
