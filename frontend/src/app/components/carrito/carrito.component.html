@@ -1,0 +1,9 @@
+<section class="bg-stone-200 rounded-lg m-8 p-4">
+    @for (product of viewProducts; track product) {
+        <app-product-card [product]="product">
+
+        </app-product-card>
+        } @empty {
+        <li>There are no items.</li>
+        }
+</section>

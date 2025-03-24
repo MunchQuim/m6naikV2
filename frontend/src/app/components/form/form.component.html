@@ -7,45 +7,51 @@
     </div>
     <div>
         <label for="name" class="block text-gray-700 font-semibold">Nombre del producto*</label>
-        <input (change)="onChangeName($event)" formControlName="nombre" type="text" name="name" id="name" class="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-300">
-        <div *ngIf="naikForm.get('nombre')?.invalid&&!naikForm.get('nombre')?.pristine" class="alert alert-danger">el campo es inválido.</div>
+        <input (change)="onChangeName($event)" formControlName="name" type="text" name="name" id="name" class="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-300">
+        <div *ngIf="naikForm.get('name')?.invalid&&!naikForm.get('name')?.pristine" class="alert alert-danger">el campo es inválido.</div>
 
     </div>
     <div>
         <label for="price" class="block text-gray-700 font-semibold">Precio*</label>
-        <input formControlName="precio" type="text" name="price" id="price" class="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-300">
-        <div *ngIf="naikForm.get('precio')?.invalid&&!naikForm.get('precio')?.pristine" class="alert alert-danger">el campo es inválido.</div>
+        <input formControlName="price" type="text" name="price" id="price" class="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-300">
+        <div *ngIf="naikForm.get('price')?.invalid&&!naikForm.get('price')?.pristine" class="alert alert-danger">el campo es inválido.</div>
+
+    </div>
+    <div>
+        <label for="stock" class="block text-gray-700 font-semibold">Stock*</label>
+        <input formControlName="stock" type="text" name="stock" id="stock" class="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-300">
+        <div *ngIf="naikForm.get('stock')?.invalid&&!naikForm.get('stock')?.pristine" class="alert alert-danger">el campo es inválido.</div>
 
     </div>
     <div>
         <label for="description" class="block text-gray-700 font-semibold">Descripción del producto</label>
-        <textarea formControlName="descripcion" name="description" id="description" rows="3" class="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-300"></textarea>
-        <div *ngIf="naikForm.get('descripcion')?.invalid&&!naikForm.get('descripcion')?.pristine" class="alert alert-danger">el campo es inválido.</div>
+        <textarea formControlName="description" name="description" id="description" rows="3" class="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-300"></textarea>
+        <div *ngIf="naikForm.get('description')?.invalid&&!naikForm.get('description')?.pristine" class="alert alert-danger">el campo es inválido.</div>
 
     </div>
     <div>
-        <label for="type" class="block text-gray-700 font-semibold">Tipo de producto*</label>
-        <select formControlName="tipo" id="type" name="type" class="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-300">
-            <option value="Zapatillas running">Zapatillas running</option>
-            <option value="Zapatillas básquet">Zapatillas básquet</option>
-            <option value="Zapatillas de salto de pértiga">Zapatillas de salto de pértiga</option>
-            <option value="Zapatillas C#">Zapatillas C#</option>
+        <label for="productTypes_id" class="block text-gray-700 font-semibold">Tipo de producto*</label>
+        <select formControlName="productTypes_id" id="productTypes_id" name="productTypes_id" class="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-300">
+            <option value="1">Zapatillas running</option>
+            <option value="2">Zapatillas básquet</option>
+            <option value="3">Zapatillas de salto de pértiga</option>
+            <option value="4">Zapatillas C#</option>
         </select>
     </div>
     <div class="flex items-center">
-        <label for="sale" class="text-gray-700 font-semibold">Producto de oferta</label>
-        <input  formControlName="oferta" type="checkbox" name="sale" id="sale" class="mr-2" >
+        <label for="onSale" class="text-gray-700 font-semibold">Producto de oferta</label>
+        <input  formControlName="onSale" type="checkbox" name="onSale" id="onSale" class="mr-2" >
     </div><!-- aprender a usar observadores y servicios para resetear el valor a 0 -->
-    <div *ngIf="naikForm.get('oferta')?.value" class="flex items-center">
+    <div *ngIf="naikForm.get('onSale')?.value" class="flex items-center">
         <label for="discount" class="text-gray-700 font-semibold">Descuento</label>
-        <input formControlName="descuento" type="number" min=0 max=95 name="discount" id="discount" class="mr-2" value=0>
-        <div *ngIf="naikForm.get('descuento')?.invalid&&!naikForm.get('descuento')?.pristine" class="alert alert-danger">el campo es inválido.</div>
+        <input formControlName="discount" type="number" min=0 max=95 name="discount" id="discount" class="mr-2" value=0>
+        <div *ngIf="naikForm.get('discount')?.invalid&&!naikForm.get('discount')?.pristine" class="alert alert-danger">el campo es inválido.</div>
 
     </div>
     <div>
-        <label for="image" class="block text-gray-700 font-semibold">Imagen del producto*</label>
-        <input formControlName="imagen" (change)="onFileSelected($event)" type="file" name="image" id="image" class="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-300">
-        <div *ngIf="naikForm.get('imagen')?.invalid&&!naikForm.get('imagen')?.pristine" class="alert alert-danger">el campo es inválido.</div>
+        <label for="imageUrl" class="block text-gray-700 font-semibold">Imagen del producto*</label>
+        <input formControlName="imageUrl" (change)="onFileSelected($event)" type="file" name="imageUrl" id="imageUrl" class="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-300">
+        <div *ngIf="naikForm.get('imageUrl')?.invalid&&!naikForm.get('imageUrl')?.pristine" class="alert alert-danger">el campo es inválido.</div>
 
     </div>
     <div class="text-center">

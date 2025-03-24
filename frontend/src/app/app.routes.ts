@@ -6,6 +6,7 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { adminGuard } from './guard/auth.guard';
 import { customerGuard } from './guard/customer-guard.guard';
+import { CarritoComponent } from './components/carrito/carrito.component';
 
 
 export const routes: Routes = [
@@ -17,7 +18,7 @@ export const routes: Routes = [
     },
     { path: "products", component: ProductsComponent },
     {
-        path: "carrito", component: ProductsComponent,
+        path: "carrito", component: CarritoComponent,
         canActivate: [customerGuard]
     },
 ];

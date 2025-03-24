@@ -1,10 +1,10 @@
 <div class="p-6 bg-stone-200 rounded-lg">
     <h1 class="font-bold text-lg" id="nombre">
-        {{product?.nombre}}
+        {{product?.name}}
     </h1>
     <div class="flex gap-4">
         <div id="imagen">
-            <img class="h-48 w-48 object-cover rounded-lg" [src]="product?.imagen" [alt]="'foto '+product?.nombre">
+            <img class="h-48 w-48 object-cover rounded-lg" [src]="product?.imageUrl" [alt]="'foto '+product?.name">
             
         </div>
         <div class="font-semibold">
@@ -12,18 +12,26 @@
                 <strong>nº referencia: </strong>{{product?.id}}
             </p>
             <p id="tipo">
-                <strong>tipo: </strong> {{product?.tipo}}
+                <strong>tipo: </strong> {{product?.productTypes_id}}
             </p>
             <p id="precio">
                 <strong>precio: </strong> 
-                <span *ngIf="product?.oferta" class="line-through mr-3">{{product?.precio}}</span><span>{{precioFinal}}</span> €
+                <span *ngIf="product?.onSale" class="line-through mr-3">{{product?.price}}</span><span>{{precioFinal}}</span> €
             </p>
-            <p *ngIf="product?.oferta" id="descuento">
-                {{product?.descuento}}% de descuento
+            <p id="stock">
+                <strong>stock: </strong> 
+                {{product?.stock}}
+            </p>
+            <p *ngIf="product?.onSale" id="descuento">
+                {{product?.discount}}% de descuento
             </p>            
             <p id="descripcion">
-                {{product?.descripcion}}
+                {{product?.description}}
             </p>
+            <button  *ngIf="product && product.stock > 0" class="bg-blue-300 rounded-lg p-2 scale-100 active:scale-80 hover:scale-110 cursor-pointer transition"  (click)="reserve(product)">
+                añadir al carrito
+            </button>
+            
         </div>
 
     </div>

@@ -18,38 +18,46 @@ export class FormComponent {
   length: number = 0;
   constructor(private productService: AddProductsService, private http: HttpClient) {//se coloca en el () para inyectar las dependencias en la construccion del componenente
     this.naikForm = new FormGroup({//en este momento si lo estamos creando como un grupo de formControls
-      id: new FormControl('', [Validators.required,Validators.maxLength(10), this.idUnica.bind(this)]),//debere cambiar este validador para que no permita valores repetidos
-      nombre: new FormControl('', [Validators.required,Validators.maxLength(10), this.nombreUnico.bind(this)]),
-      precio: new FormControl('', [Validators.required, Validators.min(0), Validators.pattern('^[0-9]+(\\.[0-9]{1,2})?$')]),
-      descripcion: new FormControl('',Validators.maxLength(500)),
-      tipo: new FormControl('', Validators.required),
-      oferta: new FormControl(false),
-      descuento: new FormControl(0, [Validators.required, Validators.min(0), Validators.max(95)]),
-      imagen: new FormControl('', Validators.required)
+      id: new FormControl('', [Validators.required,Validators.maxLength(10), this.idUnica.bind(this), Validators.pattern('^[0-9]+(\\.[0-9]{1,2})?$')]),//debere cambiar este validador para que no permita valores repetidos
+      name: new FormControl('', [Validators.required,Validators.maxLength(10), this.nombreUnico.bind(this)]),
+      price: new FormControl('', [Validators.required, Validators.min(0), Validators.pattern('^[0-9]+(\\.[0-9]{1,2})?$')]),
+      stock: new FormControl('', [Validators.required, Validators.min(0), Validators.pattern('^[0-9]+(\\.[0-9]{1,2})?$')]),
+      description: new FormControl('',Validators.maxLength(500)),
+      productTypes_id: new FormControl('', Validators.required),
+      onSale: new FormControl(false),
+      discount: new FormControl(0, [Validators.required, Validators.min(0), Validators.max(95)]),
+      imageUrl: new FormControl('', Validators.required)
     });
 
   }
   saveData() {
+
     if (this.naikForm.valid) {
       //creamos la imagen
       let customFileName: string;
       if (this.file) {
         const formData = new FormData();
         customFileName = `${this.name}${this.file.name.substring(this.file.name.lastIndexOf('.'))}`;//le llamo como el nombre del producto.extension de la imagen
-
-
         formData.append('imagen', this.file, customFileName);
-
         this.http.post('http://localhost:3000/upload', formData).subscribe(//chatgpt
           (response) => console.log('Imagen subida con éxito:', response),
           (error) => console.error('Error al subir la imagen:', error)
         );
+        //hemos subido la imagen al servidor de imágenes
         
+        //subimos los datos a la base de datos
         const newProduct: Product = this.naikForm.value;
-        newProduct.imagen = 'http://localhost:3000/' + customFileName;
+        newProduct.imageUrl = 'http://localhost:3000/' + customFileName;
+        this.http.post("http://localhost:2700/products",newProduct).subscribe(
+          (response) =>{
+            console.log('Producto registrado con éxito:', response);
+          }, 
+          (error) =>{
+            console.error('Error al registrar el producto:', error);
+          }
+        );
+
         this.productService.addProduct(newProduct);
-        console.log('Producto guardado:', newProduct);
-        console.log('todos los productos:', this.productService.getProducts()());
         // Reiniciar el formulario después de guardar
         this.naikForm.reset({ oferta: false, descuento: 0 });
 
@@ -91,7 +99,7 @@ export class FormComponent {
     const productos = this.productService.getProducts();
     if (productos() != undefined) {
       for (let producto of productos()) {
-        if (control.value === producto.nombre) {
+        if (control.value === producto.name) {
           return { coincidencia: true }; // Return an error if the ID is duplicated
         }
       }

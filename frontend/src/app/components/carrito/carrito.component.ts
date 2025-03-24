@@ -1,18 +1,17 @@
 import { Component, Signal } from '@angular/core';
+import { ProductCardComponent } from '../product-card/product-card.component';
 import { AddProductsService } from '../../services/add-products.service';
 import { Product } from '../../interfaces/product.product';
-import { OnInit } from '@angular/core';
-import { ProductCardComponent } from '../product-card/product-card.component';
 @Component({
-  selector: 'app-products',
+  selector: 'app-carrito',
   imports: [ProductCardComponent],
-  templateUrl: './products.component.html',
-  styleUrl: './products.component.css'
+  templateUrl: './carrito.component.html',
+  styleUrl: './carrito.component.css'
 })
-export class ProductsComponent {
+export class CarritoComponent {
   products: Signal<Product[]>;
   viewProducts: Product[] = [];
-  filter: string = '';
+  //filter: string = '';
   size: number = 0;
 
   constructor(private productService: AddProductsService) {
@@ -26,14 +25,5 @@ export class ProductsComponent {
     this.productService.pullProducts();
     console.log('products:' + this.products);
     this.size = this.products.length;
-  }
-  setFilter(event: Event): void {
-    const inputElement = event.target as HTMLInputElement;
-    this.filter = inputElement.value;
-    if (this.filter != '') {
-      this.viewProducts = this.products().filter(product => product.id.toString().includes(this.filter) || product.name.includes(this.filter))
-    } else {
-      this.viewProducts = this.products();
-    }
   }
 }

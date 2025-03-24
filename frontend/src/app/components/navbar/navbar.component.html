@@ -4,7 +4,7 @@
         <a routerLink="/home">
             <div>HOME</div>
         </a>
-        <a *ngIf="authService.isAuthenticated()" routerLink="/products">
+        <a routerLink="/products">
             <div>PRODUCTS</div>
         </a>
         <a *ngIf="authService.isAuthenticated() && authService.isAdmin()" routerLink="/admin">

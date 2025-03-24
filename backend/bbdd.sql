@@ -105,11 +105,11 @@ ENGINE = InnoDB;
 -- Table `naikDB`.`cart`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `naikDB`.`cart` ;
-
-CREATE TABLE IF NOT EXISTS `naikDB`.`cart` (
+DROP TABLE IF EXISTS `naikDB`.`carts` ;
+CREATE TABLE IF NOT EXISTS `naikDB`.`carts` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `users_id` INT NOT NULL,
-  `validUntil` DATETIME NOT NULL,
+  `validUntil` DATETIME NOT NULL DEFAULT CURRENT_timestamp,
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_cart_users1`
     FOREIGN KEY (`users_id`)
@@ -125,24 +125,25 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `naikDB`.`cart_has_products` ;
 
 CREATE TABLE IF NOT EXISTS `naikDB`.`cart_has_products` (
-  `cart_users_id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `cart_id` INT NOT NULL,
   `products_id` INT NOT NULL,
   `quantity` INT NOT NULL,
-  PRIMARY KEY (`cart_users_id`, `products_id`),
+  PRIMARY KEY (`id`), 
+  UNIQUE KEY `unique_cart_product` (`cart_id`, `products_id`), -- Asegura unicidad de la combinación
   INDEX `fk_cart_has_products_products1_idx` (`products_id` ASC) VISIBLE,
-  INDEX `fk_cart_has_products_cart1_idx` (`cart_users_id` ASC) VISIBLE,
+  INDEX `fk_cart_has_products_cart1_idx` (`cart_id` ASC) VISIBLE,
   CONSTRAINT `fk_cart_has_products_cart1`
-    FOREIGN KEY (`cart_users_id`)
-    REFERENCES `naikDB`.`cart` (`users_id`)
+    FOREIGN KEY (`cart_id`)
+    REFERENCES `naikDB`.`carts` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_cart_has_products_products1`
     FOREIGN KEY (`products_id`)
     REFERENCES `naikDB`.`products` (`id`)
-    ON DELETE cascade
-    ON UPDATE cascade)
-ENGINE = InnoDB;
-
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `naikDB`.`historial`
