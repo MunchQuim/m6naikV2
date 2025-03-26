@@ -200,9 +200,13 @@ app.delete("/users/:id", (request, response) => {
 
 // Insertar el carrito para el usuario recién creado
 app.post("/carts",(request,response)=>{
+    const body = request.body;
+    const now = new Date();
+    now.setMinutes(now.getMinutes() + 5);  
+    const validUntil = now.toISOString().slice(0, 19).replace('T', ' ');
     db.query(
-        'INSERT INTO carts (users_id) VALUES (?)',
-        [request.userId],
+        'INSERT INTO carts (users_id,validUntil) VALUES (?,?)',
+        [body.users_id,validUntil],
         (err, results) => {
             if (err) {
                 console.error('Error al crear el carrito:', err);
@@ -222,6 +226,17 @@ app.post("/carts",(request,response)=>{
 app.get("/carts/:id", (request, response) => {
     const cartId = request.params.id;
     db.query('SELECT * from carts where id = ?', [cartId], (err, results) => {
+        if (err) {
+            console.error('Error al obtener el carrito:', err);
+            response.status(500).json({ error: 'Error al obtener el carrito' });
+        } else {
+            response.json({ carrito: results });
+        }
+    })
+});
+app.get("/userCart/:id", (request, response) => {
+    const userId = request.params.id;
+    db.query('SELECT * from carts where users_id = ?', [userId], (err, results) => {
         if (err) {
             console.error('Error al obtener el carrito:', err);
             response.status(500).json({ error: 'Error al obtener el carrito' });

@@ -180,4 +180,14 @@ ENGINE = InnoDB;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+
+-- añado un evento que teoricamente revisa el validUntil de los carritos hasta que el ahora sea superior
+CREATE EVENT delete_expired_carts
+ON SCHEDULE EVERY 1 MINUTE
+DO
+DELETE FROM carts WHERE validUntil < UTC_TIMESTAMP();
+
+insert into users (username, email, password, roles_id) values("admin","admin@example.com","1234",1);
+
 commit;

@@ -17,13 +17,17 @@ export class AddCartService {
   getCart(): Signal<Product[]> {
     return this.cart;
   }
-  async addToCart(newProduct: Product) { //añadir el producto al carrito
-    console.log(this.productService.updateProductStock(newProduct.id,newProduct.stock-1))
-     // actualizamos el stock en la base de datos
-/*     newProduct.stock = newProduct.stock - 1; //reducimos su stock en 1
-    this.productService.products.update() */
-  }
+  async addToCart(newProduct: Product) {
+    if (newProduct.stock > 0) {
+      await this.productService.updateProductStock(newProduct.id, newProduct.stock - 1);
 
+      this.cart.update(cart => [...cart, { ...newProduct, stock: 1 }]); // Añadir con stock 1 al carrito
+  
+      // Actualizamos el stock del producto en el servicio de productos
+      this.productService.pullProducts();
+    }
+  }
+  
   async pullCart(): Promise<void> {
     const userData = sessionStorage.getItem("user");
     if (userData) {
@@ -59,3 +63,6 @@ export class AddCartService {
   }
 
 }
+     // actualizamos el stock en la base de datos
+/*     newProduct.stock = newProduct.stock - 1; //reducimos su stock en 1
+    this.productService.products.update() */
