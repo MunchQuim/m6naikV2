@@ -32,8 +32,10 @@ export class AddProductsService {
 
   }
 
-  updateProductStock(id: number, newStock: number): Observable<any> {
-    return this.http.patch(`http://localhost:2700/products/${id}`, { stock: newStock });
+  updateProductStock(id: number, newStock: number) {    
+    this.http.patch(`http://localhost:2700/products/${id}`, { stock: newStock }).subscribe(
+      (response: any) => {console.log(response)}
+    );
   }
 
   getLength(): number {
@@ -70,7 +72,7 @@ export class AddProductsService {
 
       // Reducir el stock solo después de asegurarnos de que hay carrito
       reservedProduct.stock -= quantity;
-
+      this.updateProductStock(reservedProduct.id, reservedProduct.stock)
       // Agregar producto al carrito
       this.addCartService.addToCart(reservedProduct, cartId, quantity);
 
