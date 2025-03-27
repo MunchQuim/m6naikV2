@@ -22,6 +22,7 @@ export class ProductsComponent {
       this.viewProducts = this.products();
     });
   }
+  
   ngOnInit() {
     // Llamamos al método para obtener los productos en el ciclo de vida OnInit
     //si no lo hago de esta manera y lo junto, da problemas al intentar meter un signal de array de productos a un array de productos

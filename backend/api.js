@@ -350,8 +350,8 @@ app.delete("/cartProducts/:id", (request, response) => {
 
 });
 app.get("/productCarts/:id",(request,response)=>{
-    const cartId = request.params.id;
-    db.query('Select * from cart_has_products where cart_id = ?',[cartId],(err,results)=>{
+    const user_id = request.params.id;
+    db.query('Select c.id, p.id, p.name, p.price, p.discount, p.imageUrl, chp.quantity, pt.name from users u join carts c on c.users_id = u.id join cart_has_products chp on chp.cart_id = c.id join products p on p.id = chp.products_id join productTypes pt on pt.id = p.productTypes_id where u.id = ? ',[user_id],(err,results)=>{
         if(err){
             console.error('Error al obtener los elementos del carrito');
             response.status(500).json({

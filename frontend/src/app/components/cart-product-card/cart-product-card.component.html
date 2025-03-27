@@ -1,0 +1,25 @@
+<div class="p-6 bg-stone-200 rounded-lg">
+    <div class="flex gap-4">
+        <div id="imagen">
+            <img class="h-48 w-48 object-cover rounded-lg" [src]="cartProduct?.imageUrl" [alt]="'foto '+cartProduct?.name">
+            
+        </div>
+        <div class="font-semibold">
+            <h1 id="nombre">
+                <strong>{{cartProduct?.name}}</strong>
+            </h1>
+            <h3 id="tipo">
+                <strong>{{cartProduct?.productType}}</strong> 
+            </h3>
+            <p id="precio">
+                <strong>precio: </strong> 
+                <span> {{precioFinal}} </span> €
+            </p>
+            <p id="cantidad">
+                <strong>Cantidad: </strong> 
+                {{cartProduct?.quantity}}
+            </p> 
+        </div>
+    </div>
+</div>
+

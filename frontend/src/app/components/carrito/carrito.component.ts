@@ -1,29 +1,30 @@
-import { Component, Signal } from '@angular/core';
-import { ProductCardComponent } from '../product-card/product-card.component';
-import { AddProductsService } from '../../services/add-products.service';
-import { Product } from '../../interfaces/product.product';
+import { Component, effect, Signal } from '@angular/core';
+import { CartProductCardComponent } from '../cart-product-card/cart-product-card.component';
+import { AddCartService } from '../../services/add-cart.service';
+import { CartProduct } from '../../interfaces/cartProduct';
+import { LongCartProduct } from '../../interfaces/cartProduct';
+
 @Component({
   selector: 'app-carrito',
-  imports: [ProductCardComponent],
+  imports: [CartProductCardComponent],
   templateUrl: './carrito.component.html',
   styleUrl: './carrito.component.css'
 })
 export class CarritoComponent {
-  products: Signal<Product[]>;
-  viewProducts: Product[] = [];
+  products: Signal<LongCartProduct[]>;
+  viewProducts: LongCartProduct[] = [];
   //filter: string = '';
   size: number = 0;
 
-  constructor(private productService: AddProductsService) {
-    this.productService.pullProducts();
-    this.products = this.productService.getProducts();
-    this.viewProducts = this.products();
+  constructor(private cartService: AddCartService) {
+    this.products = this.cartService.getLongCartProducts();
+
+    effect(() => {
+      this.viewProducts = this.products();
+      console.log(this.viewProducts);
+    });
   }
   ngOnInit() {
-    // Llamamos al método para obtener los productos en el ciclo de vida OnInit
-    //si no lo hago de esta manera y lo junto, da problemas al intentar meter un signal de array de productos a un array de productos
-    this.productService.pullProducts();
-    console.log('products:' + this.products);
-    this.size = this.products.length;
+    this.cartService.getDbCartProduct();
   }
 }
