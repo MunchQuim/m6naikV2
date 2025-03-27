@@ -31,30 +31,22 @@ export class AddCartService {
     this.LongCart.update(LongCart => [...LongCart, newLongCartProduct]);
   }
 
-
+  //recoge los datos de todos los productos del carrito
   async getDbCartProduct(): Promise<void> {
     const userData = sessionStorage.getItem("user");
     if (userData) {
       const userId = JSON.parse(userData).id;
       this.http.get(`http://localhost:2700/productCarts/${userId}`).subscribe(
-        (response: any) => {  
+        (response: any) => {
           this.LongCart.update(() => [...response.carrito_products]);
         })
     }
-    
+  }
+  async deleteDbCartProduct(cartProduct_id: number) {
+    console.log(cartProduct_id);
+    this.http.delete(`http://localhost:2700/cartProducts/${cartProduct_id}`).subscribe(
 
-
-    /*  
- 
-       this.http.get("http://localhost:2700/cart/" + userId).subscribe(
-         (response: any) => {
-           console.log("////////////////////////")
-           console.log(response)
-           this.cart.update(() => [...response.carrito]);
-         }
- 
-       )
-      */
+    )
   }
   //lo sube a la base de datos
   async addToCart(newProduct: Product, cart_id: number, quantity: number) {

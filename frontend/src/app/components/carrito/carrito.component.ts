@@ -11,17 +11,16 @@ import { LongCartProduct } from '../../interfaces/cartProduct';
   styleUrl: './carrito.component.css'
 })
 export class CarritoComponent {
-  products: Signal<LongCartProduct[]>;
-  viewProducts: LongCartProduct[] = [];
+  cart_products: Signal<LongCartProduct[]>;
+  viewCart_Products: LongCartProduct[] = [];
   //filter: string = '';
   size: number = 0;
 
   constructor(private cartService: AddCartService) {
-    this.products = this.cartService.getLongCartProducts();
+    this.cart_products = this.cartService.getLongCartProducts();
 
     effect(() => {
-      this.viewProducts = this.products();
-      console.log(this.viewProducts);
+      this.viewCart_Products = this.cart_products();
     });
   }
   ngOnInit() {

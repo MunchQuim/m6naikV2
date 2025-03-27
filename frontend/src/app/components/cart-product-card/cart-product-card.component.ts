@@ -2,15 +2,16 @@ import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { AddCartService } from '../../services/add-cart.service';
 import { LongCartProduct } from '../../interfaces/cartProduct';
+import { HttpClient, HttpClientXsrfModule } from '@angular/common/http';
 @Component({
   selector: 'app-cart-product-card',
-  imports: [CommonModule],
+  imports: [CommonModule, HttpClientXsrfModule],
   templateUrl: './cart-product-card.component.html',
   styleUrl: './cart-product-card.component.css'
 })
 export class CartProductCardComponent {
   @Input() cartProduct?: LongCartProduct;
-  constructor(private addCartService: AddCartService) {
+  constructor(private http: HttpClient, private addCartService: AddCartService) {
 
   }
   get precioFinal(): number | undefined {
@@ -19,4 +20,9 @@ export class CartProductCardComponent {
     }
     return undefined;
   };
+
+  borrarProducto(selectedCartProduct:LongCartProduct){
+     this.addCartService.deleteDbCartProduct(selectedCartProduct.id);
+     this.addCartService.getDbCartProduct();
+  }
 }

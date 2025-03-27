@@ -1,10 +1,12 @@
-<section class="bg-stone-200 rounded-lg m-8 p-4">
-   
-    @for (cartProduct of viewProducts; track cartProduct) {
+<section class="flex flex-wrap bg-stone-200 rounded-lg m-8 p-4 gap-2">
+   <div class="flex flex-col gap-2">
+    @for (cartProduct of this.viewCart_Products; track cartProduct) {
         <app-cart-product-card [cartProduct]="cartProduct">
 
         </app-cart-product-card>
         } @empty {
         <li>There are no items.</li>
         }
+   </div>
+    
 </section>
