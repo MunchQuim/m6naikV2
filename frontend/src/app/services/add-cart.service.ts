@@ -3,34 +3,45 @@ import { signal, Signal } from '@angular/core';
 import { Product } from '../interfaces/product.product';
 import { HttpClient } from '@angular/common/http';
 import { HttpClientModule } from '@angular/common/http';
-import { FunctionsService } from './functions.service';
-import { AddProductsService } from './add-products.service';
+import { CartProduct } from '../interfaces/cartProduct';
+
+
 @Injectable({
   providedIn: 'root'
 })
 export class AddCartService {
-  cart = signal<Product[]>([]);
+  cart = signal<CartProduct[]>([]);
+  
 
   private http = inject(HttpClient); // al ser un servicio no tiene un constructor, se requiere injectarlo directamente
-  private productService = inject(AddProductsService);
 
-  getCart(): Signal<Product[]> {
-    return this.cart;
-  }
-  async addToCart(newProduct: Product) {
-    if (newProduct.stock > 0) {
-      await this.productService.updateProductStock(newProduct.id, newProduct.stock - 1);
-
-      this.cart.update(cart => [...cart, { ...newProduct, stock: 1 }]); // Añadir con stock 1 al carrito
-  
-      // Actualizamos el stock del producto en el servicio de productos
-      this.productService.pullProducts();
+  async addToCart(newProduct: Product, cart_id:number, quantity:number) {
+    
+    const cartProduct: CartProduct = {
+      cart_id:cart_id,
+      products_id:newProduct.id,
+      quantity: quantity
     }
-  }
+    this.http.post('http://localhost:2700/cartProducts',cartProduct).subscribe(
+      (response)=>{
+        console.log(response);
+        this.http.patch(`http://localhost:2700/cart/${cart_id}`,null).subscribe(
+          (response)=>{
+            console.log("tiempo reestablecido")
+          }
+        )
+      }
+    )
+
   
+  }
+
+
+
+
   async pullCart(): Promise<void> {
     const userData = sessionStorage.getItem("user");
-    if (userData) {
+   /*  if (userData) {
       const userId = JSON.parse(userData).id;
 
       this.http.get("http://localhost:2700/cart/" + userId).subscribe(
@@ -39,14 +50,14 @@ export class AddCartService {
           console.log(response)
           this.cart.update(() => [...response.carrito]);
         }
-      
+
       )
-    }
+    } */
   }
 
   async pushCart(): Promise<void> {
     const userData = sessionStorage.getItem("user");
-    if (userData) {
+   /*  if (userData) {
       const userId = JSON.parse(userData).id;
       console.log('a')
       await this.http.post("http://localhost:2700/cartProducts/" + userId, this.cart).subscribe(
@@ -59,10 +70,10 @@ export class AddCartService {
         },
       )
 
-    }
+    } */
   }
 
 }
-     // actualizamos el stock en la base de datos
+// actualizamos el stock en la base de datos
 /*     newProduct.stock = newProduct.stock - 1; //reducimos su stock en 1
     this.productService.products.update() */

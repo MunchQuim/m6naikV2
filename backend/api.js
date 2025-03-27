@@ -4,6 +4,7 @@ const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
+const MINUTES = 2;
 app.use(cors({
     origin: ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:4200'], // Permite peticiones solo desde esta URL
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], // Métodos permitidos
@@ -202,7 +203,7 @@ app.delete("/users/:id", (request, response) => {
 app.post("/carts",(request,response)=>{
     const body = request.body;
     const now = new Date();
-    now.setMinutes(now.getMinutes() + 5);  
+    now.setMinutes(now.getMinutes() + MINUTES);  
     const validUntil = now.toISOString().slice(0, 19).replace('T', ' ');
     db.query(
         'INSERT INTO carts (users_id,validUntil) VALUES (?,?)',
@@ -276,7 +277,9 @@ app.delete("/users/:id", (request, response) => {
 })
 app.patch('/cart/:id', async (req, res) => {
     const cartId = req.params.id;
-    const newValidUntil = new Date(Date.now() + 5 * 60000);
+    const now = new Date();
+    now.setMinutes(now.getMinutes() + MINUTES);  
+    const newValidUntil = now.toISOString().slice(0, 19).replace('T', ' ');
     db.query('UPDATE carts SET validUntil = ? WHERE id = ?',
         [newValidUntil, cartId], (err, results) => {
             if (err) {

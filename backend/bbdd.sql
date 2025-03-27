@@ -181,12 +181,51 @@ SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
-
+delimiter |
 -- añado un evento que teoricamente revisa el validUntil de los carritos hasta que el ahora sea superior
 CREATE EVENT delete_expired_carts
 ON SCHEDULE EVERY 1 MINUTE
 DO
-DELETE FROM carts WHERE validUntil < UTC_TIMESTAMP();
+BEGIN
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE cart_id INT;
+    
+    -- Cursor para obtener los IDs de los carritos expirados
+    DECLARE cur CURSOR FOR 
+        SELECT id FROM carts WHERE validUntil < UTC_TIMESTAMP();
+    
+    -- Manejo de errores para cuando no haya más registros en el cursor
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+    -- Abrimos el cursor
+    OPEN cur;
+
+    -- Iteramos sobre cada carrito expirado
+    read_loop: LOOP
+        FETCH cur INTO cart_id;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+
+        -- Restaurar el stock de los productos en el carrito
+        UPDATE products p
+        JOIN cart_has_products chp ON p.id = chp.products_id
+        SET p.stock = p.stock + chp.quantity
+        WHERE chp.cart_id = cart_id;
+
+        -- Eliminar los productos del carrito
+        DELETE FROM cart_has_products WHERE cart_id = cart_id;
+
+        -- Eliminar el carrito
+        DELETE FROM carts WHERE id = cart_id;
+    END LOOP;
+
+    -- Cerrar el cursor
+    CLOSE cur;
+END |
+delimiter ;
+
+
 
 insert into users (username, email, password, roles_id) values("admin","admin@example.com","1234",1);
 
