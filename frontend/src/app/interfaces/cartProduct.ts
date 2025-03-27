@@ -7,7 +7,7 @@ export interface CartProduct {
 export interface LongCartProduct{ //cualquier cambio en esta interfaz debe tener en cuenta el get productos del carrito por id del API
     id:number,
     cart_id:number
-    products_id:number,
+    product_id:number,
     quantity:number,
     name:string,
     price:number,

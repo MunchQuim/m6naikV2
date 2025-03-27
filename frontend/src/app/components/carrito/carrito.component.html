@@ -1,12 +1,19 @@
-<section class="flex flex-wrap bg-stone-200 rounded-lg m-8 p-4 gap-2">
-   <div class="flex flex-col gap-2">
-    @for (cartProduct of this.viewCart_Products; track cartProduct) {
-        <app-cart-product-card [cartProduct]="cartProduct">
-
-        </app-cart-product-card>
+<section class="flex bg-stone-200 rounded-lg m-8 p-4 gap-2 relative max-h-[800px]">
+    <!-- Contenedor con scroll solo para los productos -->
+    <div class="flex flex-col gap-2 overflow-y-auto grow-5 max-h-[500px] pr-4">
+        @for (cartProduct of this.viewCart_Products; track cartProduct.id) {
+            <app-cart-product-card [cartProduct]="cartProduct"></app-cart-product-card>
         } @empty {
-        <li>There are no items.</li>
+            <li>There are no items.</li>
         }
-   </div>
-    
+    </div>
+
+    <!-- Sección sticky fuera del contenedor con scroll -->
+    <div *ngIf="this.viewCart_Products.length>0" class="p-4 font-bold text-center grow-1 bg-white shadow-lg rounded-lg sticky bottom-0">
+        <h1>Precio Final:</h1>
+        <p>{{ total }} €</p>
+        <button class="bg-sky-300 text-white rounded-lg p-2">
+            Comprar
+        </button>
+    </div>
 </section>

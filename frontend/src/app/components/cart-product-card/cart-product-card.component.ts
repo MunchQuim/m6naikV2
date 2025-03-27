@@ -21,8 +21,9 @@ export class CartProductCardComponent {
     return undefined;
   };
 
-  borrarProducto(selectedCartProduct:LongCartProduct){
-     this.addCartService.deleteDbCartProduct(selectedCartProduct.id);
-     this.addCartService.getDbCartProduct();
+  async borrarProducto(selectedCartProduct: LongCartProduct) {
+    await this.addCartService.restoreDBProductStock(selectedCartProduct.product_id,selectedCartProduct.quantity);
+    await this.addCartService.deleteDbCartProduct(selectedCartProduct.id);
+    await this.addCartService.getDbCartProduct();
   }
 }
