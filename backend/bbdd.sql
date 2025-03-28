@@ -151,14 +151,16 @@ CREATE TABLE IF NOT EXISTS `naikDB`.`cart_has_products` (
 DROP TABLE IF EXISTS `naikDB`.`historial` ;
 
 CREATE TABLE IF NOT EXISTS `naikDB`.`historial` (
+  `id` INT NOT NULL AUTO_INCREMENT,
   `users_id` INT NOT NULL,
   `products_id` INT NOT NULL,
   `cart_id` INT NOT NULL,
-  `buyedAt` DATETIME NOT NULL,
-  PRIMARY KEY (`products_id`, `users_id`),
+  `quantity`int not null,
+  `buyedAt` DATETIME NOT NULL default CURRENT_timestamp,
+   `imageUrl` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`id`),
   INDEX `fk_users_has_products_products1_idx` (`products_id` ASC) VISIBLE,
   INDEX `fk_users_has_products_users1_idx` (`users_id` ASC) VISIBLE,
-  INDEX `fk_historial_cart1_idx` (`cart_id` ASC) VISIBLE,
   CONSTRAINT `fk_users_has_products_users1`
     FOREIGN KEY (`users_id`)
     REFERENCES `naikDB`.`users` (`id`)
@@ -167,11 +169,6 @@ CREATE TABLE IF NOT EXISTS `naikDB`.`historial` (
   CONSTRAINT `fk_users_has_products_products1`
     FOREIGN KEY (`products_id`)
     REFERENCES `naikDB`.`products` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_historial_cart1`
-    FOREIGN KEY (`cart_id`)
-    REFERENCES `naikDB`.`cart` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -228,5 +225,6 @@ delimiter ;
 
 
 insert into users (username, email, password, roles_id) values("admin","admin@example.com","1234",1);
+insert into users (username, email, password, roles_id) values("customer","customer@example.com","1234",2);
 
 commit;

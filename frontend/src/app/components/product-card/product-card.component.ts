@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { AddProductsService } from '../../services/add-products.service';
 import { AddCartService } from '../../services/add-cart.service';
+import { AuthServiceService } from '../../services/auth-service.service';
 @Component({
   selector: 'app-product-card',
   imports: [CommonModule, HttpClientModule],
@@ -13,8 +14,17 @@ import { AddCartService } from '../../services/add-cart.service';
 })
 export class ProductCardComponent {
   @Input() product?: Product;
-  constructor(http: HttpClient, private addProductsService: AddProductsService) {
+  user_role: string = '';
+  constructor(http: HttpClient, private addProductsService: AddProductsService,public authService: AuthServiceService) {
+    
+  }
 
+  ngOnInit() {
+    const userData = sessionStorage.getItem("user");
+    if (userData) {
+      this.user_role = JSON.parse(userData).roles_id;
+    }
+    
   }
   get precioFinal(): number | undefined {
     if (this.product) {

@@ -33,4 +33,11 @@ export class CarritoComponent {
       return total + precioConDescuento;
     }, 0);
   }
+ async comprar(){
+    await this.cartService.buyCart();
+    console.log("Compra realizada con exito");
+    await this.cartService.deleteCart(this.viewCart_Products[0].cart_id);
+    this.cartService.getDbCartProduct();
+    this.cart_products = this.cartService.getLongCartProducts();
+  }
 }

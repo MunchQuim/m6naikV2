@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { HttpClientModule } from '@angular/common/http';
 import { CartProduct } from '../interfaces/cartProduct';
 import { LongCartProduct } from '../interfaces/cartProduct';
+import { HistorialProduct } from '../interfaces/cartProduct';
 
 
 @Injectable({
@@ -44,21 +45,21 @@ export class AddCartService {
   }
   async deleteDbCartProduct(cartProduct_id: number) {
     this.http.delete(`http://localhost:2700/cartProducts/${cartProduct_id}`).subscribe(
-      (response:any)=>{
+      (response: any) => {
         this.LongCart.update(cart => cart.filter(product => product.id !== cartProduct_id));
       }
     )
   }
-  async restoreDBProductStock(product_id:number, quantity:number){
+  async restoreDBProductStock(product_id: number, quantity: number) {
     this.http.get(`http://localhost:2700/products/${product_id}`).subscribe(
-      (response:any)=>{
-        
+      (response: any) => {
+
         const stock = response.productos[0].stock + quantity;
-        this.http.patch(`http://localhost:2700/products/${product_id}`,{ stock: stock }).subscribe(      
+        this.http.patch(`http://localhost:2700/products/${product_id}`, { stock: stock }).subscribe(
         )
       }
     )
-    
+
   }
   //lo sube a la base de datos
   async addToCart(newProduct: Product, cart_id: number, quantity: number) {
@@ -81,6 +82,46 @@ export class AddCartService {
 
 
   }
+  async buyCart( cart_id: number) {
+    const userData = sessionStorage.getItem("user");
+    let user_id: number;
+    if (userData) {
+      user_id = JSON.parse(userData).id;
+
+    }
+    this.LongCart().forEach(product => {
+      const historialProduct: HistorialProduct = {
+        users_id: user_id,
+        products_id: product.product_id,
+        cart_id: product.cart_id,
+        quantity: product.quantity,
+        imageUrl: product.imageUrl
+      }
+      this.http.post('http://localhost:2700/historial', historialProduct).subscribe(
+        (response) => {
+          console.log("historial subido con exito")
+          this.http.delete(`http://localhost:2700/cartProducts/${historialProduct.products_id}`).subscribe(
+            (response) => {
+              console.log("producto eliminado del carrito")
+            }
+          )
+        }
+      )
+     
+    });
+    this.http.delete(`http://localhost:2700/cart/${cart_id}`).subscribe(
+      (response) => {
+        console.log("carrito eliminado")
+        this.LongCart.update(() => []);
+      }
+    )
+  }
+
+
+  async deleteCart(cart_id: number) {
+
+  }
+
 
 
 

@@ -200,14 +200,14 @@ app.delete("/users/:id", (request, response) => {
 // carrito
 
 // Insertar el carrito para el usuario recién creado
-app.post("/carts",(request,response)=>{
+app.post("/carts", (request, response) => {
     const body = request.body;
     const now = new Date();
-    now.setMinutes(now.getMinutes() + MINUTES);  
+    now.setMinutes(now.getMinutes() + MINUTES);
     const validUntil = now.toISOString().slice(0, 19).replace('T', ' ');
     db.query(
         'INSERT INTO carts (users_id,validUntil) VALUES (?,?)',
-        [body.users_id,validUntil],
+        [body.users_id, validUntil],
         (err, results) => {
             if (err) {
                 console.error('Error al crear el carrito:', err);
@@ -247,23 +247,24 @@ app.get("/userCart/:id", (request, response) => {
     })
 });
 
-app.get("/carts",(request,response)=>{
-    db.query('Select * from carts',(err,results)=>{
-        if(err){
+app.get("/carts", (request, response) => {
+    db.query('Select * from carts', (err, results) => {
+        if (err) {
             console.error('Errpr al obtener los carritos');
             response.status(500).json({
                 error: 'Error al obtener los carritos'
             })
-        }else{
+        } else {
             response.json({
-                carritos:results
+                carritos: results
             })
         }
     })
 })
 
-app.delete("/users/:id", (request, response) => {
+app.delete("/cart/:id", (request, response) => {
     const cartId = request.params.id;
+    console.log('DELETE from carts where id = '+ cartId);
     db.query('DELETE from carts where id = ?', [cartId], (err, results) => {
         if (err) {
             console.error('Error al borrar el carrito')
@@ -278,7 +279,7 @@ app.delete("/users/:id", (request, response) => {
 app.patch('/cart/:id', async (req, res) => {
     const cartId = req.params.id;
     const now = new Date();
-    now.setMinutes(now.getMinutes() + MINUTES);  
+    now.setMinutes(now.getMinutes() + MINUTES);
     const newValidUntil = now.toISOString().slice(0, 19).replace('T', ' ');
     db.query('UPDATE carts SET validUntil = ? WHERE id = ?',
         [newValidUntil, cartId], (err, results) => {
@@ -349,18 +350,57 @@ app.delete("/cartProducts/:id", (request, response) => {
     });
 
 });
-app.get("/productCarts/:id",(request,response)=>{
+app.get("/productCarts/:id", (request, response) => {
     const user_id = request.params.id;
-    db.query('Select chp.id as "id", c.id as "cart_id", p.id as "product_id", p.name, p.price, p.discount, p.imageUrl, chp.quantity, pt.name as "productType" from users u join carts c on c.users_id = u.id join cart_has_products chp on chp.cart_id = c.id join products p on p.id = chp.products_id join productTypes pt on pt.id = p.productTypes_id where u.id = ? ',[user_id],(err,results)=>{
-        if(err){
+    db.query('Select chp.id as "id", c.id as "cart_id", p.id as "product_id", p.name, p.price, p.discount, p.imageUrl, chp.quantity, pt.name as "productType" from users u join carts c on c.users_id = u.id join cart_has_products chp on chp.cart_id = c.id join products p on p.id = chp.products_id join productTypes pt on pt.id = p.productTypes_id where u.id = ? ', [user_id], (err, results) => {
+        if (err) {
             console.error('Error al obtener los elementos del carrito');
             response.status(500).json({
                 error: 'Error al obtener los elementos del carrito'
             })
-        }else{
+        } else {
             response.json({
-                carrito_products:results
+                carrito_products: results
             })
         }
     })
 })
+
+//historial
+app.get("/historial/:id", (request, response) => {
+    const userId = request.params.id;
+    db.query('SELECT * from historial where users_id = ?', [userId], (err, results) => {
+        if (err) {
+            console.error('Error al obtener el historial:', err);
+            response.status(500).json({ error: 'Error al obtener el historial' });
+        } else {
+            response.json({ historial: results });
+        }
+    })
+}
+);
+app.post("/historial", (request, response) => {
+    const newHistorial = request.body;
+    db.query('INSERT INTO historial (users_id, products_id, cart_id, quantity, imageUrl) VALUES (?, ?, ?, ?, ?)',
+        [newHistorial.users_id, newHistorial.products_id, newHistorial.cart_id,newHistorial.quantity, newHistorial.imageUrl], (err, results) => {
+            if (err) {
+                console.error('Error al crear el historial:', err);
+                response.status(500).json({ error: 'Error al crear el historial' });
+            } else {
+                response.json({ message: 'historial creado con éxito', historial: newHistorial });
+            }
+        });
+});
+app.delete("/historial/:id", (request, response) => {
+    const historialId = request.params.id;
+    db.query('DELETE from historial WHERE id = ?', [historialId], (err) => {
+        if (err) {
+            console.error('Error al borrar el historial:', err);
+            response.status(500).json({ error: 'Error al borrar el historial' });
+        } else {
+            response.json({ message: 'historial borrado con exito' });
+        }
+    });
+
+});
+

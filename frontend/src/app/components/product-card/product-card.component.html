@@ -28,7 +28,7 @@
             <p id="descripcion">
                 {{product?.description}}
             </p>
-            <button  *ngIf="product && product.stock > 0" class="bg-blue-300 rounded-lg p-2 scale-100 active:scale-80 hover:scale-110 cursor-pointer transition"  (click)="reserve(product)">
+            <button  *ngIf="product && product.stock > 0 && authService.isCustomer()" class="bg-blue-300 rounded-lg p-2 scale-100 active:scale-80 hover:scale-110 cursor-pointer transition"  (click)="reserve(product)">
                 añadir al carrito
             </button>
             

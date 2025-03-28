@@ -15,3 +15,11 @@ export interface LongCartProduct{ //cualquier cambio en esta interfaz debe tener
     imageUrl:string,
     productType:number
 }
+export interface HistorialProduct{
+    users_id:number,
+    products_id:number,
+    cart_id:number,
+    quantity:number,
+    buyedAt?:Date
+    imageUrl:string
+}
